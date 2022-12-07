@@ -2,7 +2,7 @@
 import {
   Elf,
   caloriesForElf,
-  weightOfHeaviestElf,
+  weightOfHeaviestElves,
   parseCaloriesListForElf,
   parseCaloriesList,
   elfCarryingMostCaloriesForInput,
@@ -15,11 +15,13 @@ describe("caloriesForElf", () => {
   });
 });
 
-describe("weightOfHeaviestElf", () => {
+describe("weightOfHeaviestElves", () => {
   it("should return the largest weight from several elves", () => {
-    const elf1: Elf = [5];
-    const elf2: Elf = [6];
-    expect(weightOfHeaviestElf([elf1, elf2])).toEqual(6);
+    const elf1: Elf = [1];
+    const elf2: Elf = [2];
+    const elf3: Elf = [3];
+    const elf4: Elf = [5];
+    expect(weightOfHeaviestElves([elf1, elf2, elf3, elf4])).toEqual(10);
   });
 });
 
@@ -39,7 +41,7 @@ describe("parseCaloriesList", () => {
 
 describe("elfCarryingMostCaloriesForInput", () => {
   it("should return the result", () => {
-    const list = "1000\n4000\n\n3000";
-    expect(elfCarryingMostCaloriesForInput(list)).toEqual(5000);
+    const list = "1000\n4000\n\n3000\n\n2000\n\n1000";
+    expect(elfCarryingMostCaloriesForInput(list)).toEqual(10000);
   });
 });
