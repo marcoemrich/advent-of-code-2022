@@ -1,4 +1,4 @@
-import * as R from "remeda";
+import * as R from "ramda";
 
 type Calories = Readonly<number>;
 export type Elf = Readonly<Calories[]>;
@@ -7,28 +7,29 @@ type weightOfHeaviestElfT = (elves: Elf[]) => Calories;
 type parseCaloriesListForElfT = (caloriesList: string) => Elf;
 type parseCaloriesListT = (list: string) => Elf[];
 type elfCarryingMostCaloriesForInputT = (list: string) => number;
+type splitCaloriesListToElfCaloriesListT = (caloriesList: string) => string[];
 
-const add = (a: number, b: number): number => a + b;
+export const caloriesForElf: caloriesForElfT = (elf) => R.sum(elf);
 
-export const caloriesForElf: caloriesForElfT = (elf) => R.reduce(elf, add, 0);
+const max = R.reduce(Math.max, 0);
 
-export const weightOfHeaviestElf: weightOfHeaviestElfT = (elves) =>
-  Math.max(...R.map(elves, caloriesForElf));
+export const weightOfHeaviestElf: weightOfHeaviestElfT = R.pipe(
+  R.map(caloriesForElf),
+  max
+);
 
-export const parseCaloriesListForElf: parseCaloriesListForElfT = (
-  caloriesList
-) => R.map(caloriesList.split("\n"), Number);
+export const parseCaloriesListForElf: parseCaloriesListForElfT = R.pipe(
+  R.split("\n"),
+  R.map(Number)
+);
 
-const splitCaloriesListToElfCaloriesList: (caloriesList: string) => string[] = (
-  caloriesList
-) => caloriesList.split("\n\n");
+const splitCaloriesListToElfCaloriesList: splitCaloriesListToElfCaloriesListT =
+  R.split("\n\n");
 
-export const parseCaloriesList: parseCaloriesListT = (caloriesList) => {
-  return R.map(
-    splitCaloriesListToElfCaloriesList(caloriesList),
-    parseCaloriesListForElf
-  );
-};
+export const parseCaloriesList: parseCaloriesListT = R.pipe(
+  splitCaloriesListToElfCaloriesList,
+  R.map(parseCaloriesListForElf)
+);
 
 export const elfCarryingMostCaloriesForInput: elfCarryingMostCaloriesForInputT =
-  (list) => weightOfHeaviestElf(parseCaloriesList(list));
+  R.pipe(parseCaloriesList, weightOfHeaviestElf);
