@@ -1,4 +1,5 @@
 import * as R from "ramda";
+import * as RE from "remeda";
 
 type Calories = Readonly<number>;
 export type Elf = Readonly<Calories[]>;
@@ -11,17 +12,11 @@ type splitCaloriesListToElfCaloriesListT = (caloriesList: string) => string[];
 
 export const caloriesForElf: caloriesForElfT = (elf) => R.sum(elf);
 
-const max = R.reduce(Math.max, 0);
-
-const diff = (a: number, b: number): number => a - b;
-const numberSort: (list: number[]) => number[] = R.sort(diff);
-const first: (list: number[]) => number | undefined = (list) => R.head(list);
-
 export const weightOfHeaviestElves: weightOfHeaviestElvesT = (elves) => {
   return R.pipe(
     R.map(caloriesForElf),
-    numberSort,
-    R.reverse as (a: number[]) => number[],
+    R.sort(R.subtract),
+    RE.reverse, //Ramda: RE.reverse as (a: number[]) => number[]
     R.take(3),
     R.sum
   )(elves);
